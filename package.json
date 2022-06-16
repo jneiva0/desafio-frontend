@@ -1,5 +1,7 @@
 {
   "name": "desafio-frontend",
+  "author": "Joao Neiva",
+  "description": "Frontend para o desafio da grao direto",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +11,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.2.1",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "@fontsource/poppins": "^4.5.8",
+    "framer-motion": "^6",
     "next": "12.1.6",
     "react": "18.2.0",
     "react-dom": "18.2.0"
@@ -19,6 +26,7 @@
     "@types/react-dom": "18.0.5",
     "eslint": "8.17.0",
     "eslint-config-next": "12.1.6",
+    "prettier": "^2.7.1",
     "typescript": "4.7.3"
   }
 }
