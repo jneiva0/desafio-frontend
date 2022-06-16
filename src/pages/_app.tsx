@@ -1,7 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/react'
 import '@fontsource/poppins'
 import type { AppProps } from 'next/app'
-import { theme } from '../styles/theme'
+import { theme } from 'src/styles/theme'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
