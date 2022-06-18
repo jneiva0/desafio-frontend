@@ -2,5 +2,7 @@
   "singleQuote": true,
   "semi": false,
   "trailingComma": "all",
-  "jsxSingleQuote": true
+  "jsxSingleQuote": true,
+  "proseWrap": "always",
+  "printWidth": 80
 }
