@@ -1,10 +1,10 @@
-import { BoxProps, chakra, Heading, HStack, Icon } from '@chakra-ui/react'
+import { chakra, Heading, HeadingProps, HStack, Icon } from '@chakra-ui/react'
 import { BsLinkedin } from 'react-icons/bs'
 
-export const TextLogo = (props: BoxProps) => (
+export const TextLogo = (props: HeadingProps) => (
   <HStack
-    mt={6}
     justify='center'
+    color='white'
     as={Heading}
     size='3xl'
     spacing={2}

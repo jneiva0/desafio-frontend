@@ -3,6 +3,7 @@ import { Form, Formik } from 'formik'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { InputControl, SubmitButton } from 'src/components/Form/InputControl'
 import { TextLogo } from 'src/components/TextLogo'
 import { object, string } from 'yup'
@@ -15,16 +16,16 @@ const loginValidationSchema = object({
 })
 
 const LoginPage: NextPage = () => {
+  const router = useRouter()
   const handleSubmit = async (values: { Email: string; Password: string }) => {
     console.log(values)
-
-    return true
+    return router.push('/restaurantes')
   }
 
   return (
     <>
       <Head>
-        <title>CookedIn</title>
+        <title>CookedIn - Entrar</title>
         <meta name='description' content='Desafio Grao Direto' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
