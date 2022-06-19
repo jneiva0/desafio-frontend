@@ -13,7 +13,26 @@ export type Restaurant = {
   address: string
   imageSrc?: string
 }
+
+export type MenuItem = {
+  id: string
+  createdAt: Date
+  updatedAt: Date
+  name: string
+  price: number
+  description: string
+  imageSrc?: string
+  restaurantId: number
+}
+
+export type RestaurantWithMenu = Restaurant & { menu: MenuItem[] }
+
 export const apiGetRestaurants = async () => {
   const { data } = await api.get<Restaurant[]>('/restaurants')
+  return data
+}
+
+export const apiGetRestaurant = async (id: number) => {
+  const { data } = await api.get<RestaurantWithMenu>(`/restaurants/${id}`)
   return data
 }
