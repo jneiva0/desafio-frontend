@@ -1,25 +1,43 @@
-import { Box, Button, Flex, Stack, Text, VStack } from '@chakra-ui/react'
-import { Form, Formik } from 'formik'
+import { Box, Flex, Stack, Text, VStack } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { InputControl, SubmitButton } from 'src/components/Form/InputControl'
+import { toast } from 'react-hot-toast'
+import { Loading } from 'src/components/Loading'
+import { Login, LoginArgs } from 'src/components/Login'
 import { TextLogo } from 'src/components/TextLogo'
-import { object, string } from 'yup'
-
-const loginValidationSchema = object({
-  Email: string()
-    .email('Digite um email válido')
-    .required('É necesário digitar um email'),
-  Password: string().required('É necessário digitar a senha.'),
-})
+import { useUsuario } from 'src/hooks/useUsuario'
+import { apiLogin } from 'src/lib/api'
 
 const LoginPage: NextPage = () => {
-  const router = useRouter()
-  const handleSubmit = async (values: { Email: string; Password: string }) => {
-    console.log(values)
-    return router.push('/restaurantes')
+  const { user, mutate, loading } = useUsuario({
+    redirectIfFound: true,
+    redirectTo: '/restaurantes',
+  })
+
+  const handleLogin = async (values: LoginArgs) => {
+    try {
+      const res = await apiLogin(values)
+      console.log(res)
+      const { accessToken } = res.data
+      localStorage.setItem('accessToken', accessToken)
+      await mutate()
+    } catch (e) {
+      console.log(e)
+      if (e instanceof apiLogin.Error) {
+        const error = e.getActualType()
+        if (error.status === 400) {
+          toast.error(error.data.validationErrors)
+        } else if (error.status === 500) {
+          toast.error(error.data.errorMessage)
+        } else {
+          toast.error('Ocorreu um erro ao tentar fazer login.')
+        }
+      }
+    }
+  }
+
+  if (loading) {
+    return <Loading />
   }
 
   return (
@@ -45,33 +63,7 @@ const LoginPage: NextPage = () => {
               shadow='lg'
               p={8}
             >
-              <Formik
-                initialValues={{ Email: '', Password: '' }}
-                onSubmit={handleSubmit}
-                validationSchema={loginValidationSchema}
-              >
-                <Stack as={Form} spacing={5}>
-                  <InputControl
-                    autoComplete='email'
-                    name='Email'
-                    placeholder='Email'
-                  />
-                  <InputControl
-                    type='password'
-                    name='Password'
-                    placeholder='Senha'
-                    autoComplete='current-password'
-                  />
-                  <SubmitButton colorScheme='red'>Entrar</SubmitButton>
-                  <Flex pt={2} justify='flex-end'>
-                    <Link href='/registrar'>
-                      <Button colorScheme='blue' variant='ghost'>
-                        Não tem uma conta?{' '}
-                      </Button>
-                    </Link>
-                  </Flex>
-                </Stack>
-              </Formik>
+              <Login handleLogin={handleLogin} />
             </Box>
           </Stack>
         </Flex>

@@ -1,38 +1,34 @@
-import axios from 'axios'
+import { Fetcher, Middleware } from 'openapi-typescript-fetch'
+import { paths } from 'src/lib/generatedApiTypes'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
 
-const api = axios.create({ baseURL: apiUrl })
-
-export type Restaurant = {
-  id: string
-  createdAt: Date
-  updatedAt: Date
-  name: string
-  phone: string
-  address: string
-  imageSrc?: string
+const logger: Middleware = async (url, init, next) => {
+  console.log(`fetching ${url} using ${init.method}`)
+  const response = await next(url, init)
+  console.log(`fetched ${url}`)
+  return response
 }
 
-export type MenuItem = {
-  id: string
-  createdAt: Date
-  updatedAt: Date
-  name: string
-  price: number
-  description: string
-  imageSrc?: string
-  restaurantId: number
+const headerMiddleware: Middleware = async (url, init, next) => {
+  console.log({ url, init, next })
+  const accessToken = localStorage.getItem('accessToken')
+  if (accessToken) {
+    init.headers.set('Authorization', `Bearer ${accessToken}`)
+  }
+  const response = await next(url, init)
+  console.log({ response })
+  return response
 }
 
-export type RestaurantWithMenu = Restaurant & { menu: MenuItem[] }
+const fetcher = Fetcher.for<paths>()
 
-export const apiGetRestaurants = async () => {
-  const { data } = await api.get<Restaurant[]>('/restaurants')
-  return data
-}
+fetcher.configure({
+  baseUrl: apiUrl,
+  use: [headerMiddleware, logger],
+})
 
-export const apiGetRestaurant = async (id: number) => {
-  const { data } = await api.get<RestaurantWithMenu>(`/restaurants/${id}`)
-  return data
-}
+//create fetch operation for each path
+export const apiLogin = fetcher.path('/auth/login').method('post').create()
+
+export const apiGetMe = fetcher.path('/auth/me').method('get').create()

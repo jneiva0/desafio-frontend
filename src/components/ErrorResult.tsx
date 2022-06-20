@@ -5,10 +5,10 @@ import {
   AlertTitle,
   Heading,
 } from '@chakra-ui/react'
-import { AxiosError } from 'axios'
+import { ApiError } from 'openapi-typescript-fetch'
 
 type Props = {
-  error: AxiosError
+  error: ApiError | any
 }
 
 export const ErrorResult = ({ error }: Props) => {
@@ -25,7 +25,7 @@ export const ErrorResult = ({ error }: Props) => {
     >
       <AlertIcon boxSize={12} mr={0} />
       <AlertTitle mt={6} as={Heading} size='xl'>
-        {error.name}
+        {error.statusText}
       </AlertTitle>
       <AlertDescription mt={4} color='gray.500' maxWidth='sm'>
         {error.message}

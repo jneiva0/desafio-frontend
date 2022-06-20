@@ -1,8 +1,7 @@
-import { apiGetRestaurants } from 'src/lib/api'
 import useSWR from 'swr'
 
 export const useRestaurants = () => {
-  const { data, error } = useSWR('restaurants', apiGetRestaurants)
+  const { data, error } = useSWR('restaurants', () => {})
 
   const isLoading = !data && !error
 
