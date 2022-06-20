@@ -15,7 +15,10 @@ export const ProtectedPage = ({ children }: Props) => {
   const { user, error, loading } = useUsuario({ redirectTo: '/login' })
 
   if (loading) return <Loading />
-  if (error) return <ErrorResult error={error} />
+  if (error) {
+    console.log({ error })
+    return <ErrorResult error={error} />
+  }
 
   return <>{children}</>
 }

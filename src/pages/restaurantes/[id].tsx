@@ -1,6 +1,3 @@
-//nextjs page to show the restaurant details using the id
-// Language: typescriptreact
-
 import {
   Box,
   Heading,
@@ -17,6 +14,7 @@ import { BsChevronLeft } from 'react-icons/bs'
 import { ErrorResult } from 'src/components/ErrorResult'
 import { Header } from 'src/components/Header'
 import { Loading } from 'src/components/Loading'
+import { ProtectedPage } from 'src/components/ProtectedPage'
 import { useRestaurant } from 'src/hooks/useRestaurant'
 
 const RestaurantDetailsPage = () => {
@@ -25,7 +23,7 @@ const RestaurantDetailsPage = () => {
     back,
   } = useRouter()
 
-  const parsedId = parseInt(String(id), 10)
+  const parsedId = String(id)
 
   const { restaurant, error, isLoading } = useRestaurant(parsedId)
 
@@ -33,7 +31,7 @@ const RestaurantDetailsPage = () => {
   if (error) return <ErrorResult error={error} />
 
   return (
-    <>
+    <ProtectedPage>
       <Head>
         <title>CookedIn - {restaurant?.name}</title>
         <meta name='description' content='Desafio Grao Direto' />
@@ -87,7 +85,7 @@ const RestaurantDetailsPage = () => {
           </Box>
         </Box>
       </Box>
-    </>
+    </ProtectedPage>
   )
 }
 

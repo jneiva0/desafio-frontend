@@ -1,6 +1,3 @@
-//React component to display a restaurant card with name, image and description using chakra-ui
-// Language: typescriptreact
-
 import {
   Box,
   Heading,
@@ -11,10 +8,10 @@ import {
   Stack,
 } from '@chakra-ui/react'
 import Link from 'next/link'
-import { Restaurant } from 'src/lib/api'
+import { components } from 'src/lib/generatedApiTypes'
 
 type Props = {
-  restaurant: Restaurant
+  restaurant: components['schemas']['RestaurantResponse']
 }
 
 export const RestaurantCard = ({ restaurant }: Props) => {

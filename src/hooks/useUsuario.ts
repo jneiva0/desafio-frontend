@@ -1,31 +1,48 @@
 import { useRouter } from 'next/router'
 import {
-  ApiResponse,
+  ApiError,
   FetchErrorType,
   FetchReturnType,
 } from 'openapi-typescript-fetch'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect } from 'react'
 import { apiGetMe } from 'src/lib/api'
 import useSWR from 'swr'
 
 type Ret = FetchReturnType<typeof apiGetMe>
 type Err = FetchErrorType<typeof apiGetMe>
 
+//Funcao usada para capturar o erro em caso de usuario nao logado (401 vindo da api)
+//e retornar null ao inves de um erro, por causa da forma como o swr opera
+//Como o nome diz SWR = Stale while revalidate, é popsivel ter data e error ao mesmo tempo
+const apiCheckLogin = async () => {
+  try {
+    const res = await apiGetMe({})
+    return res
+  } catch (e) {
+    if (e instanceof ApiError) {
+      if (e.status === 401) {
+        return { data: null }
+      }
+    }
+    throw e
+  }
+}
+
 export const useUsuario = ({
   redirectTo = '',
   redirectIfFound = false,
 } = {}) => {
-  const { data, error, mutate } = useSWR<ApiResponse<Ret>, Err>(
-    '/auth/me',
-    () => apiGetMe(null),
-    {
-      shouldRetryOnError: false,
-    },
-  )
-  //memoizando para garantir que a referencia da variavel seja estavel
-  const user = useMemo(() => data?.data, [data])
+  const { data, error, mutate } = useSWR('/auth/me', () => apiCheckLogin(), {
+    shouldRetryOnError: false,
+  })
+  const user = data?.data
   const loading = !error && !data
   const router = useRouter()
+
+  const logout = useCallback(async () => {
+    localStorage.removeItem('accessToken')
+    await mutate()
+  }, [mutate])
 
   useEffect(() => {
     // se nao for necessario redirecionar, apenas retorna
@@ -45,5 +62,5 @@ export const useUsuario = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, redirectTo, user])
 
-  return { user, loading, error, mutate }
+  return { user, loading, error, mutate, logout }
 }
