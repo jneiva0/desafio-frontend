@@ -19,8 +19,11 @@ export type paths = {
   "/restaurants": {
     get: operations["getAll"];
   };
-  [key: `/restaurants/${string}`]: {
+  "/restaurants/{id}": {
     get: operations["getOne"];
+  };
+  "/restaurants/search/{searchInput}": {
+    get: operations["search"];
   };
 };
 
@@ -77,6 +80,10 @@ export type components = {
       phone: string;
       imageSrc: string;
       address: string;
+    };
+    SearchResponse: {
+      restaurants: components["schemas"]["RestaurantResponse"][];
+      itens: components["schemas"]["MenuItemResponse"][];
     };
   };
 };
@@ -148,6 +155,20 @@ export type operations = {
       200: {
         content: {
           "application/json": components["schemas"]["RestaurantWithMenuResponse"];
+        };
+      };
+    };
+  };
+  search: {
+    parameters: {
+      path: {
+        searchInput: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["SearchResponse"];
         };
       };
     };

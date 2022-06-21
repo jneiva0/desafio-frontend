@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { ProtectedPage } from 'src/components/ProtectedPage'
-import { RestaurantList } from 'src/components/RestaurantList'
+import { RestaurantListContainer } from 'src/components/Restaurant/RestaurantListContainer'
 import { SearchBar } from 'src/components/SearchBar'
 import { Header } from './../../components/Header'
 
@@ -21,7 +21,7 @@ const RestaurantsPage: NextPage = () => {
           <SearchBar />
         </Box>
         <Box px={4} mt={8}>
-          <RestaurantList />
+          <RestaurantListContainer />
         </Box>
       </Box>
     </ProtectedPage>

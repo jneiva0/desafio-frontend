@@ -34,3 +34,8 @@ export const apiGetRestaurant = fetcher
   .path('/restaurants/{id}')
   .method('get')
   .create()
+
+export const apiBuscar = fetcher
+  .path('/restaurants/search/{searchInput}')
+  .method('get')
+  .create()

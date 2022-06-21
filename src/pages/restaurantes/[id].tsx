@@ -4,7 +4,6 @@ import {
   HStack,
   IconButton,
   Image,
-  SimpleGrid,
   Stack,
   Text,
 } from '@chakra-ui/react'
@@ -14,6 +13,7 @@ import { BsChevronLeft } from 'react-icons/bs'
 import { ErrorResult } from 'src/components/ErrorResult'
 import { Header } from 'src/components/Header'
 import { Loading } from 'src/components/Loading'
+import { MenuItemListResult } from 'src/components/MenuItem/MenuItem'
 import { ProtectedPage } from 'src/components/ProtectedPage'
 import { useRestaurant } from 'src/hooks/useRestaurant'
 
@@ -72,16 +72,8 @@ const RestaurantDetailsPage = () => {
             <Heading size='lg' as='h3'>
               Cardapio
             </Heading>
-            <SimpleGrid mt={2} p={3} columns={[2, 3, 3, 4]} spacing={4}>
-              {restaurant?.menu.map((item) => (
-                <Box key={item.id} shadow='lg' bg='white' maxW='40'>
-                  <Text>{item.name}</Text>
-                  <Text>R${item.price}</Text>
-                  <Text>{item.description}</Text>
-                  <Image alt={item.name} src={item.imageSrc} w='32' />
-                </Box>
-              ))}
-            </SimpleGrid>
+            <MenuItemListResult menuItens={restaurant?.menu} />
+            <MenuItemListResult menuItens={undefined} />
           </Box>
         </Box>
       </Box>
